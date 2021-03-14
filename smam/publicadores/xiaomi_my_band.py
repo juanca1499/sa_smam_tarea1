@@ -135,7 +135,8 @@ class XiaomiMyBand:
         connection.close()  # Se cierra la conexión
 
         time.sleep(1)
-
+        
+        message = {}
         message['blood_preasure'] = self.simulate_blood_preasure()
         message['id'] = str(self.id)
         message['datetime'] = self.simulate_datetime()
@@ -151,6 +152,86 @@ class XiaomiMyBand:
         channel.basic_publish(exchange='', routing_key='blood_preasure', body=str(message), properties=pika.BasicProperties(
             delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
         connection.close()  # Se cierra la conexión
+
+        time.sleep(1)
+
+        """message = {}
+        message['p_position_1'] = self.simulate_x_position()
+        message['p_position_2'] = self.simulate_y_position()
+        message['p_position_3'] = self.simulate_z_position()
+        message['id'] = str(self.id)
+        message['datetime'] = self.simulate_datetime()
+        message['producer'] = self.producer
+        message['model'] = self.model
+        message['hardware_version'] = self.hardware_version
+        message['software_version'] = self.software_version
+        # Se establece la conexión con el Distribuidor de Mensajes
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        # Se solicita un canal por el cuál se enviarán los signos vitales
+        channel = connection.channel()
+        channel.queue_declare(queue='p_position', durable=True)
+        channel.basic_publish(exchange='', routing_key='p_position', body=str(message), properties=pika.BasicProperties(
+            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
+        connection.close()  # Se cierra la conexión"""
+
+
+        message = {}
+        message['x_position'] = self.simulate_x_position()
+        message['id'] = str(self.id)
+        message['datetime'] = self.simulate_datetime()
+        message['producer'] = self.producer
+        message['model'] = self.model
+        message['hardware_version'] = self.hardware_version
+        message['software_version'] = self.software_version
+        # Se establece la conexión con el Distribuidor de Mensajes
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        # Se solicita un canal por el cuál se enviarán los signos vitales
+        channel = connection.channel()
+        # Se declara una cola para persistir los mensajes enviados
+        channel.queue_declare(queue='x_position', durable=True)
+        channel.basic_publish(exchange='', routing_key='x_position', body=str(message), properties=pika.BasicProperties(
+            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
+        connection.close()  # Se cierra la conexión
+
+        time.sleep(1)
+
+        message = {}
+        message['y_position'] = self.simulate_y_position()
+        message['id'] = str(self.id)
+        message['datetime'] = self.simulate_datetime()
+        message['producer'] = self.producer
+        message['model'] = self.model
+        message['hardware_version'] = self.hardware_version
+        message['software_version'] = self.software_version
+        # Se establece la conexión con el Distribuidor de Mensajes
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        # Se solicita un canal por el cuál se enviarán los signos vitales
+        channel = connection.channel()
+        # Se declara una cola para persistir los mensajes enviados
+        channel.queue_declare(queue='y_position', durable=True)
+        channel.basic_publish(exchange='', routing_key='y_position', body=str(message), properties=pika.BasicProperties(
+            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
+        connection.close()  # Se cierra la conexión
+
+        time.sleep(1)
+        
+        message = {}
+        message['z_position'] = self.simulate_z_position()
+        message['id'] = str(self.id)
+        message['datetime'] = self.simulate_datetime()
+        message['producer'] = self.producer
+        message['model'] = self.model
+        message['hardware_version'] = self.hardware_version
+        message['software_version'] = self.software_version
+        # Se establece la conexión con el Distribuidor de Mensajes
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        # Se solicita un canal por el cuál se enviarán los signos vitales
+        channel = connection.channel()
+        # Se declara una cola para persistir los mensajes enviados
+        channel.queue_declare(queue='z_position', durable=True)
+        channel.basic_publish(exchange='', routing_key='z_position', body=str(message), properties=pika.BasicProperties(
+            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
+        connection.close()  # Se cierra la conexión       
 
     def simulate_datetime(self):
         return time.strftime("%d:%m:%Y:%H:%M:%S")
