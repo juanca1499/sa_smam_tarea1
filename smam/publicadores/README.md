@@ -4,9 +4,16 @@ Esta carpeta contiene los publicadores del SMAM. Los publicadores simulan, a tra
 
 ## Versión
 
-2.1.1 - Marzo 2020
+2.1.2 - Marzo 2021
 
 ## Autores
 
 * **Perla Velasco**
 * **Yonathan Martínez**
+
+## Edicion 
+* **Alejandro Carrillo Villegas**
+* **César Gabriel Díaz Curiel**
+* **Juan Carlos García Murillo**
+* **Josué Guillermo González Pinedo**
+* **José Germán González Rodarte**
