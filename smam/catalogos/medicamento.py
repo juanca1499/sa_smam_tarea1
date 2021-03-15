@@ -17,20 +17,20 @@
 #   Las características de ésta clase son las siguientes:
 #
 #                                          Medicamento.py
-#           +-----------------------+-------------------------+------------------------+
-#           |  Nombre del elemento  |     Responsabilidad     |      Propiedades       |
-#           +-----------------------+-------------------------+------------------------+
-#           |                       |                         |                  |
-#           |                       |                         |                        |
-#           |                       |  - Almacenar            |                        |
-#           |      Medicamento      |    datos de un          |                        |
-#           |                       |    medicamento.         |                        |
-#           |                       |                         |    Define en que       |
-#           |                       |                         |    momento se le       |
-#           |                       |                         |    suministra un       |
-#           |                       |                         |    medicamento         |
-#           |                       |                         |    a un adulto mayor.  |
-#           +-----------------------+-------------------------+------------------------+
+#           +-----------------------+-------------------------+
+#           |  Nombre del elemento  |     Responsabilidad     |
+#           +-----------------------+-------------------------+
+#           |                       |                         |
+#           |                       |                         |
+#           |                       |  - Almacenar            |
+#           |      Medicamento      |    datos de un          |
+#           |                       |    medicamento.         |
+#           |                       |                         |
+#           |                       |                         |
+#           |                       |                         |
+#           |                       |                         |
+#           |                       |                         |
+#           +-----------------------+-------------------------+
 #
 #-------------------------------------------------------------------------
 
