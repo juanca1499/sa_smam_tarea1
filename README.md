@@ -96,10 +96,17 @@ En la siguiente figura se muestra el diseño de la propuesta de solución del de
 
 ## Versión
 
-2.1.1 - Marzo 2020
+2.1.2 - Marzo 2021
 
 ## Autores
 
 * **Perla Velasco**
 * **Yonathan Martínez**
 * **Sergio Salazar**
+
+## Edicion 
+* **Alejandro Carrillo Villegas**
+* **César Gabriel Díaz Curiel**
+* **Juan Carlos García Murillo**
+* **Josué Guillermo González Pinedo**
+* **José Germán González Rodarte**
