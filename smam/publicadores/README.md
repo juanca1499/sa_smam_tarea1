@@ -11,7 +11,7 @@ Esta carpeta contiene los publicadores del SMAM. Los publicadores simulan, a tra
 * **Perla Velasco**
 * **Yonathan Martínez**
 
-## Edicion 
+## Edición 
 * **Alejandro Carrillo Villegas**
 * **César Gabriel Díaz Curiel**
 * **Juan Carlos García Murillo**

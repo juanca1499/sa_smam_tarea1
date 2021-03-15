@@ -1,4 +1,4 @@
-# Catalogos
+# Catálogos
 
 Esta carpeta contiene clases de almacenamiento de datos.
 

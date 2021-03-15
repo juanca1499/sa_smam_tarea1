@@ -104,7 +104,7 @@ En la siguiente figura se muestra el diseño de la propuesta de solución del de
 * **Yonathan Martínez**
 * **Sergio Salazar**
 
-## Edicion 
+## Edición 
 * **Alejandro Carrillo Villegas**
 * **César Gabriel Díaz Curiel**
 * **Juan Carlos García Murillo**
