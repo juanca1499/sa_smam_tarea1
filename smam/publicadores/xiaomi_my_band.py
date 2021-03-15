@@ -90,11 +90,14 @@ class XiaomiMyBand:
     hardware_version = "2.0.3.2.1"
     software_version = "10.2.3.1"
     step_count = 0
+    timer = 0
     battery_level = 81
+    farmacos = ('Paracetamol','Ibuprofeno','Insulina','Furosemida','Piroxicam','Tolbutamida')
     id = 0
 
     def __init__(self, id):
         self.id = id
+        self.medicamentos = self.simulate_medicine()
 
     def publish(self):
         message = {}
@@ -231,8 +234,29 @@ class XiaomiMyBand:
         channel.queue_declare(queue='z_position', durable=True)
         channel.basic_publish(exchange='', routing_key='z_position', body=str(message), properties=pika.BasicProperties(
             delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
-        connection.close()  # Se cierra la conexión       
+        connection.close()  # Se cierra la conexión     
 
+        time.sleep(1)
+
+        message = {}
+        #message['medicamentos'] = self.medicamentos
+        #message['timer'] = self.simulate.time()
+        message['id'] = str(self.id)
+        message['datetime'] = self.simulate_datetime()
+        message['producer'] = self.producer
+        message['model'] = self.model
+        message['hardware_version'] = self.hardware_version
+        message['software_version'] = self.software_version
+        # Se establece la conexión con el Distribuidor de Mensajes
+        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        # Se solicita un canal por el cuál se enviarán los signos vitales
+        channel = connection.channel()
+        # Se declara una cola para persistir los mensajes enviados
+        channel.queue_declare(queue='time', durable=True)
+        channel.basic_publish(exchange='', routing_key='time', body=str(message), properties=pika.BasicProperties(
+            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
+        connection.close()  # Se cierra la conexión        
+  
     def simulate_datetime(self):
         return time.strftime("%d:%m:%Y:%H:%M:%S")
 
@@ -268,3 +292,22 @@ class XiaomiMyBand:
 
     def simulate_blood_preasure(self):
         return random.randint(100, 200)
+
+    def simulate_timer(self):
+        if self.timer != 24:
+            self.timer += 1
+            return self.timer
+        else:
+            self.timer = 1
+            return self.timer 
+    
+    # Se agregan medicamentos de manera aleatoria
+    def simulate_medicine(self):
+        medicines = []
+        quantity = random.randint(1,len(self.farmacos))
+        while quantity > 0:
+            medicamento = self.farmacos[random.randint(0,len(self.farmacos) - 1)]
+            if medicamento not in medicines:
+                medicines.append(medicamento)
+            quantity = quantity - 1
+        return medicines

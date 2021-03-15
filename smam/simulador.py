@@ -81,7 +81,7 @@ class Simulador:
         for x in range(0, 1000):
             for s in self.sensores:
                 s.publish()
-
+                
 if __name__ == '__main__':
     simulador = Simulador()
     simulador.set_up_sensors()

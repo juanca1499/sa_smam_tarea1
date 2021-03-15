@@ -54,6 +54,29 @@ class Monitor:
         print("")
         print("")
 
+    def print_position(self, datetime, id, positions, name_param, model):
+        print("  ---------------------------------------------------")
+        print("    AVISO")
+        print("  ---------------------------------------------------")
+        print("El adulto mayor que utiliza el dispositivo " + str(model) + ":" + str(id) + "tiene las siguientes coordenadas:")
+        print("x = " + positions[0])
+        print("y = " + positions[1])
+        print("z = " + positions[2])
+        print("")
+        print("")
+    
+    def print_medicine_notification(self, datetime, ids, value, name_param, model):
+        print("  ---------------------------------------------------")
+        print("    AVISO")
+        print("  ---------------------------------------------------")
+        print("Le toca su dosis de " + str(name_param) + "(" + str(value) + ")" + " a los adultos mayores con los siguientes dispositivos:")
+        print("DISPOSITIVO \t Identificador")
+        print(str(model) + ":" + str(id))
+       # for dispositivo in ids:
+        #    print(model + ":" + str(id[dispositivo]))
+        print("")
+        print("")
+        
     def format_datetime(self, datetime):
         values_datetime = datetime.split(':')
         f_datetime = values_datetime[3] + ":" + values_datetime[4] + " del " + \
