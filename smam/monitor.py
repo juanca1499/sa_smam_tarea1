@@ -4,7 +4,13 @@
 # Archivo: monitor.py
 # Capitulo: 3 Estilo Publica-Subscribe
 # Autor(es): Perla Velasco & Yonathan Mtz.
-# Version: 2.0.1 Mayo 2017
+# Edición: 
+#   Alejandro Carrillo Villegas 
+#   César Gabriel Díaz Curiel
+#   Juan Carlos García Murillo
+#   Josué Guillermo González Pinedo
+#   José Germán González Rodarte
+# Version: 2.0.2 Marzo 2021
 # Descripción:
 #
 #   Ésta clase define el rol del monitor, es decir, muestra datos, alertas y advertencias sobre los signos vitales de los adultos mayores.
@@ -34,7 +40,33 @@
 #           |                        |     que se desea notifi- |                       |
 #           |                        |     car.                 |                       |
 #           |                        |  - name_param: signo vi- |                       |
-#           |                        |     tal que se desea no- |                       |
+#           |                        |     tal que se desea     |                       |
+#           |                        |     notificar            |                       |
+#           +------------------------+--------------------------+-----------------------+
+#           |  print_position()      |  - datetime: fecha en que|  - Imprime el mensa-  |
+#           |                        |     se envió el mensaje. |    je recibido.       |
+#           |                        |  - id: identificador del |                       |
+#           |                        |     dispositivo que      |                       |
+#           |                        |     envió el mensaje.    |                       |
+#           |                        |  - positions: arreglo que|                       |
+#           |                        |    contiene los valores  |                       |
+#           |                        |    de los 3 valores.     |                       |
+#           |                        |  - model: modelo de la   |                       |
+#           |                        |    banda                 |                       |
+#           +------------------------+--------------------------+-----------------------+
+#           |  print_medicine_       |  - datetime: fecha en que|  - Imprime el mensa-  |
+#           |  notification()        |     se envió el mensaje. |    je recibido.       |
+#           |                        |  - id: identificador del |                       |
+#           |                        |     dispositivo que      |                       |
+#           |                        |     envió el mensaje.    |                       |
+#           |                        |  - value: dosis del me-  |                       |
+#           |                        |    dicamento que toca    |                       |
+#           |                        |    suministrar.          |                       |
+#           |                        |  - name_param: Medica-   |                       |
+#           |                        |    mento que toca        |                       |
+#           |                        |    suministrar.          |                       |
+#           |                        |  - model: modelo de la   |                       |
+#           |                        |    banda                 |                       |
 #           +------------------------+--------------------------+-----------------------+
 #           |   format_datetime()    |  - datetime: fecha que se|  - Formatea la fecha  |
 #           |                        |     formateará.          |    en que se recibió  |
@@ -54,26 +86,22 @@ class Monitor:
         print("")
         print("")
 
-    def print_position(self, datetime, id, positions, name_param, model):
+    def print_position(self, datetime, id, positions, model):
         print("  ---------------------------------------------------")
-        print("    AVISO")
+        print("    AVISO POSICIÓN")
         print("  ---------------------------------------------------")
-        print("El adulto mayor que utiliza el dispositivo " + str(model) + ":" + str(id) + "tiene las siguientes coordenadas:")
+        print("El adulto mayor que utiliza el dispositivo " + str(model) + ":" + str(id) + " tiene las siguientes coordenadas:")
         print("x = " + positions[0])
         print("y = " + positions[1])
         print("z = " + positions[2])
         print("")
         print("")
     
-    def print_medicine_notification(self, datetime, ids, value, name_param, model):
+    def print_medicine_notification(self, datetime, id, value, name_param, model):
         print("  ---------------------------------------------------")
-        print("    AVISO")
+        print("    AVISO MEDICAMENTO " + str(datetime))
         print("  ---------------------------------------------------")
-        print("Le toca su dosis de " + str(name_param) + "(" + str(value) + ")" + " a los adultos mayores con los siguientes dispositivos:")
-        print("DISPOSITIVO \t Identificador")
-        print(str(model) + ":" + str(id))
-       # for dispositivo in ids:
-        #    print(model + ":" + str(id[dispositivo]))
+        print("Le toca su dosis de " + str(name_param) + " (" + str(value) + ")" + " al adulto mayor que utiliza el dispositivo " + str(model) + ":" + str(id))
         print("")
         print("")
         

@@ -3,15 +3,20 @@
 #-------------------------------------------------------------------------
 # Archivo: procesador_de_medicamento.py
 # Capitulo: 3 Estilo Publica-Subscribe
-# Autor(es): Equipo 3
-# Version: 2.0.1 Marzo 2021
+# Autor(es): 
+#   Alejandro Carrillo Villegas 
+#   César Gabriel Díaz Curiel
+#   Juan Carlos García Murillo
+#   Josué Guillermo González Pinedo
+#   José Germán González Rodarte
+# Version: 2.0.2 Marzo 2021
 # Descripción:
 #
 #   Esta clase define el rol de un suscriptor, es decir, es un componente que recibe mensajes.
 #
 #   Las características de ésta clase son las siguientes:
 #
-#                                     procesador_de_presion.py
+#                                     procesador_de_medicamento.py
 #           +-----------------------+-------------------------+------------------------+
 #           |  Nombre del elemento  |     Responsabilidad     |      Propiedades       |
 #           +-----------------------+-------------------------+------------------------+
@@ -19,13 +24,12 @@
 #           |                       |                         |    eventos generados   |
 #           |                       |  - Identificar cuando   |    por el wearable     |
 #           |     Procesador de     |    a un adulto mayor    |    Xiaomi My Band.     |
-#           |        Medicamento    |    le toca tomar un     |                        |
-#           |                       |       medicamento.      |  - Define el valor ex- |
-#           |                       |                         |    tremo de la presión |
-#           |                       |                         |    arterial en 110.    |
-#           |                       |                         |  - Notifica al monitor |
-#           |                       |                         |    cuando un valor ex- |
-#           |                       |                         |    tremo es detectado. |
+#           |      Medicamento      |    le toca tomar un     |                        |
+#           |                       |       medicamento.      |    Define en que       |
+#           |                       |                         |    momento se le       |
+#           |                       |                         |    suministra un       |
+#           |                       |                         |    medicamento         |
+#           |                       |                         |    a un adulto mayor.  |
 #           +-----------------------+-------------------------+------------------------+
 #
 #   A continuación se describen los métodos que se implementaron en ésta clase:
@@ -40,9 +44,9 @@
 #           |                        |                          |    dor de mensajes.   |
 #           +------------------------+--------------------------+-----------------------+
 #           |                        |  - ch: propio de Rabbit. |  - Procesa y detecta  |
-#           |                        |  - method: propio de     |    valores extremos de|
-#           |                        |     Rabbit.              |    la presión         |
-#           |       callback()       |  - properties: propio de |    arterial.          |
+#           |                        |  - method: propio de     |    en que momento     |
+#           |                        |     Rabbit.              |    se le suministra   |
+#           |       callback()       |  - properties: propio de |    medicamento.       |
 #           |                        |     Rabbit.              |                       |
 #           |                        |  - body: mensaje recibi- |                       |
 #           |                        |     do.                  |                       |
@@ -68,12 +72,12 @@ from catalogos.medicamento import Medicamento
 
 class ProcesadorMedicamento:
 
-    medicamentos = []
-    break_val = 3
+    drugs = []
+    array_bands = []
+    array_time = []
 
-    def __init__(self,medicamentos):
-        self.medicamentos = medicamentos
-        self.break_val = 3
+    def __init__(self,drugs):
+        self.drugs = drugs
     
     def consume(self):
         try:
@@ -95,22 +99,30 @@ class ProcesadorMedicamento:
 
     def callback(self, ch, method, properties, body):
         json_message = self.string_to_json(body)
-        self.break_val = self.break_val - 1
-        print(json_message['datetime'])
-
-        #print(json_message['medicamentos'])
-
-        #if self.break_val == 0:
-         #   monitor = Monitor()
-          #  monitor.print_medicine_notification(json_message['datetime'], json_message['id'],medicamentos[2].dosis, 
-           # 'medicamento', json_message['model'])
-            #self.break_val = 3
+        
+        # Lista de medicamentos del paciente actual
+        meds = list(map(int, json_message['drugs'].split()))
+        
+        #Si la banda no ha emitido ninguna alerta se agreaga
+        if json_message['id'] not in array_bands:
+            array_bands.append(json_message['id'])
+            array_time.append(-1)
+        #Si la banda no ha emitido los mensajes correspondientes a dicha hora
+        if int(json_message['datetime'].split(':')[-2])!=array_time[array_bands.index(json_message['id'])]:
+            # Se recorren los id's de los medicamentos que el paciente tiene asignados.
+            for m in meds:
+                # Se identifica cuales medicamentos le tocan al paciente de acuerdo 
+                # al MINUTO actual (por practicidad).  
+                if int(json_message['datetime'].split(':')[-2]) % drugs[m-1].tiempo_dosis == 0:
+                    monitor = Monitor()
+                    monitor.print_medicine_notification(json_message['datetime'],json_message['id'],drugs[m-1].dosis,drugs[m-1].nombre,json_message['model'])
+            #Agrega en el arreglo array_time que se emitieron los mensajes correspondientes a esa hora        
+            array_time[array_bands.index(json_message['id'])]= int(json_message['datetime'].split(':')[-2])
 
         time.sleep(1)
         ch.basic_ack(delivery_tag=method.delivery_tag)
 
     def string_to_json(self, string):
-        print("MENSAJE:" + str(string))
         message = {}
         string = string.decode('utf-8')
         string = string.replace('{', '')
@@ -121,19 +133,17 @@ class ProcesadorMedicamento:
             message[v[0].replace('\'', '')] = v[1].replace('\'', '')
         return message
 
-    def __reducir_tiempo(self,segundos):
-        pass
-
-
 if __name__ == '__main__':
     # Inicialización de medicamentos.
-    medicamentos = []
-    medicamentos.append(Medicamento('Paracetamol','500mg',8))
-    medicamentos.append(Medicamento('Ibuprofeno','200mg',12))
-    medicamentos.append(Medicamento('Insulina','100mg',12))
-    medicamentos.append(Medicamento('Furosemida','300mg',8))
-    medicamentos.append(Medicamento('Piroxicam','100mg',24))
-    medicamentos.append(Medicamento('Tolbutamida','200mg',24))
+    drugs = []
+    drugs.append(Medicamento('Paracetamol','500mg',2))
+    drugs.append(Medicamento('Ibuprofeno','200mg',3))
+    drugs.append(Medicamento('Insulina','100mg',2))
+    drugs.append(Medicamento('Furosemida','300mg',5))
+    drugs.append(Medicamento('Piroxicam','100mg',3))
+    drugs.append(Medicamento('Tolbutamida','200mg',2))
+    array_bands = []
+    array_time = []
 
-    p_medicamento = ProcesadorMedicamento(medicamentos)
+    p_medicamento = ProcesadorMedicamento(drugs)
     p_medicamento.consume()

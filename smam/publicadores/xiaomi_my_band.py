@@ -5,7 +5,13 @@
 # Archivo: xiaomi_my_band.py
 # Capitulo: 3 Patrón Publica-Subscribe
 # Autor(es): Perla Velasco & Yonathan Mtz.
-# Version: 1.0.1 Mayo 2017
+# Edición: 
+#   Alejandro Carrillo Villegas 
+#   César Gabriel Díaz Curiel
+#   Juan Carlos García Murillo
+#   Josué Guillermo González Pinedo
+#   José Germán González Rodarte
+# Version: 2.0.2 Marzo 2021
 # Descripción:
 #
 #   Ésta clase define el rol de un publicador, es decir, es un componente que envia mensajes.
@@ -77,6 +83,11 @@
 #           |                             |          Ninguno         |  - Simula la presión  |
 #           | simulate_blood_preasure()   |                          |    arterial.          |
 #           +-----------------------------+--------------------------+-----------------------+
+#           |                             |                          |  - Agrega el identifi-|
+#           |                             |          Ninguno         |    cador de medicamen-|
+#           | simulate_drugs()            |                          |    tos de manera      |
+#           |                             |                          |    aleatoria.         |
+#           +-----------------------------+--------------------------+-----------------------+
 #
 #-------------------------------------------------------------------------
 import pika
@@ -90,14 +101,12 @@ class XiaomiMyBand:
     hardware_version = "2.0.3.2.1"
     software_version = "10.2.3.1"
     step_count = 0
-    timer = 0
     battery_level = 81
-    farmacos = ('Paracetamol','Ibuprofeno','Insulina','Furosemida','Piroxicam','Tolbutamida')
     id = 0
 
     def __init__(self, id):
         self.id = id
-        self.medicamentos = self.simulate_medicine()
+        self.medicamentos = self.simulate_drugs()
 
     def publish(self):
         message = {}
@@ -158,10 +167,9 @@ class XiaomiMyBand:
 
         time.sleep(1)
 
-        """message = {}
-        message['p_position_1'] = self.simulate_x_position()
-        message['p_position_2'] = self.simulate_y_position()
-        message['p_position_3'] = self.simulate_z_position()
+        message['posicion_x'] = self.simulate_x_position()
+        message['posicion_y'] = self.simulate_y_position()
+        message['posicion_z'] = self.simulate_z_position()
         message['id'] = str(self.id)
         message['datetime'] = self.simulate_datetime()
         message['producer'] = self.producer
@@ -172,75 +180,15 @@ class XiaomiMyBand:
         connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         # Se solicita un canal por el cuál se enviarán los signos vitales
         channel = connection.channel()
-        channel.queue_declare(queue='p_position', durable=True)
-        channel.basic_publish(exchange='', routing_key='p_position', body=str(message), properties=pika.BasicProperties(
-            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
-        connection.close()  # Se cierra la conexión"""
-
-
-        message = {}
-        message['x_position'] = self.simulate_x_position()
-        message['id'] = str(self.id)
-        message['datetime'] = self.simulate_datetime()
-        message['producer'] = self.producer
-        message['model'] = self.model
-        message['hardware_version'] = self.hardware_version
-        message['software_version'] = self.software_version
-        # Se establece la conexión con el Distribuidor de Mensajes
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-        # Se solicita un canal por el cuál se enviarán los signos vitales
-        channel = connection.channel()
-        # Se declara una cola para persistir los mensajes enviados
-        channel.queue_declare(queue='x_position', durable=True)
-        channel.basic_publish(exchange='', routing_key='x_position', body=str(message), properties=pika.BasicProperties(
+        channel.queue_declare(queue='posicion', durable=True)
+        channel.basic_publish(exchange='', routing_key='posicion', body=str(message), properties=pika.BasicProperties(
             delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
         connection.close()  # Se cierra la conexión
 
         time.sleep(1)
 
         message = {}
-        message['y_position'] = self.simulate_y_position()
-        message['id'] = str(self.id)
-        message['datetime'] = self.simulate_datetime()
-        message['producer'] = self.producer
-        message['model'] = self.model
-        message['hardware_version'] = self.hardware_version
-        message['software_version'] = self.software_version
-        # Se establece la conexión con el Distribuidor de Mensajes
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-        # Se solicita un canal por el cuál se enviarán los signos vitales
-        channel = connection.channel()
-        # Se declara una cola para persistir los mensajes enviados
-        channel.queue_declare(queue='y_position', durable=True)
-        channel.basic_publish(exchange='', routing_key='y_position', body=str(message), properties=pika.BasicProperties(
-            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
-        connection.close()  # Se cierra la conexión
-
-        time.sleep(1)
-        
-        message = {}
-        message['z_position'] = self.simulate_z_position()
-        message['id'] = str(self.id)
-        message['datetime'] = self.simulate_datetime()
-        message['producer'] = self.producer
-        message['model'] = self.model
-        message['hardware_version'] = self.hardware_version
-        message['software_version'] = self.software_version
-        # Se establece la conexión con el Distribuidor de Mensajes
-        connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-        # Se solicita un canal por el cuál se enviarán los signos vitales
-        channel = connection.channel()
-        # Se declara una cola para persistir los mensajes enviados
-        channel.queue_declare(queue='z_position', durable=True)
-        channel.basic_publish(exchange='', routing_key='z_position', body=str(message), properties=pika.BasicProperties(
-            delivery_mode=2,))  # Se realiza la publicación del mensaje en el Distribuidor de Mensajes
-        connection.close()  # Se cierra la conexión     
-
-        time.sleep(1)
-
-        message = {}
-        #message['medicamentos'] = self.medicamentos
-        #message['timer'] = self.simulate.time()
+        message['drugs'] = self.medicamentos
         message['id'] = str(self.id)
         message['datetime'] = self.simulate_datetime()
         message['producer'] = self.producer
@@ -293,21 +241,12 @@ class XiaomiMyBand:
     def simulate_blood_preasure(self):
         return random.randint(100, 200)
 
-    def simulate_timer(self):
-        if self.timer != 24:
-            self.timer += 1
-            return self.timer
-        else:
-            self.timer = 1
-            return self.timer 
-    
-    # Se agregan medicamentos de manera aleatoria
-    def simulate_medicine(self):
-        medicines = []
-        quantity = random.randint(1,len(self.farmacos))
-        while quantity > 0:
-            medicamento = self.farmacos[random.randint(0,len(self.farmacos) - 1)]
-            if medicamento not in medicines:
-                medicines.append(medicamento)
-            quantity = quantity - 1
-        return medicines
+    def simulate_drugs(self):
+        assigned_drugs = random.randint(1,5)
+        drugs = []
+        for d in range(0,assigned_drugs):
+            drug = random.randint(1,6)
+            if drug not in drugs:
+                drugs.append(drug)
+        drugs_str = ' '.join(str(e) for e in drugs)
+        return drugs_str                                                     
