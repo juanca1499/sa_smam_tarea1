@@ -8,6 +8,21 @@ La fundación Catalina Huffmann, que es una fundación altruista en la región, 
 
 En la siguiente figura se muestra el diseño de la propuesta de solución del departamento de desarrollo para el SMAM.
 
+### Actualización de requerimientos (Versión 2.0.2 | Marzo 2021)
+A partir del mes de enero del 2021 las políticas de cuidados y de salud del asilo
+han sido modificadas y ahora se requieren las siguientes actualizaciones en el
+sistema. 
+- a) Incluir un sensor de acelerómetro que será asignado a cada uno de los
+     adultos mayores para detectar la posición en la que se encuentran durante el
+     día.
+- b) Incluir un sensor de tiempo para emitir una alarma a la hora en la que le toca
+     tomar un medicamento a cada adulto mayor. Por practicidad el temporizador
+     funciona para grupos de los adultos que toman un mismo tipo de
+     medicamento. El sistema deberá indicar al operador el nombre del
+     medicamento que le toca a cada uno de los adultos mayores (por ejemplo:
+     paracetamol, ibuprofeno, insulina, furosemida, piroxicam, tolbutamida) así
+     como su dosis.
+
 ![Vista de contenedores del SMAM](docs/diagrama_contenedores_capitulo_4_v3.png)
 
 ## Prerrequisitos
